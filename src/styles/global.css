@@ -1,0 +1,224 @@
+/* Fonts */
+@import '@fontsource/atkinson-hyperlegible/400.css';
+@import '@fontsource/atkinson-hyperlegible/700.css';
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/700.css';
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Color Palette (Kandinsky Several Circles inspired) ── */
+:root {
+  /* Base blues */
+  --deep-blue: #0b1a3e;
+  --mid-blue: #1a3a6e;
+  --sky-blue: #4a8eca;
+
+  /* Accent (ochre/gold from the painting) */
+  --accent: #93aaed;
+  --accent-hover: #93aaed;
+
+  /* Warm tones from the painting */
+  --warm-red: #b84233;
+  --rose: #c76d77;
+  --soft-violet: #6b4c8a;
+
+  /* Neutrals */
+  --gray-100: #f4f4f6;
+  --gray-200: #e2e2e8;
+  --gray-300: #c8c8d0;
+  --gray-500: #6e6e7a;
+  --gray-700: #3a3a44;
+  --gray-900: #1a1a22;
+
+  /* Semantic tokens (light mode defaults) */
+  --bg: #fafaf8;
+  --bg-secondary: var(--gray-100);
+  --text: var(--gray-900);
+  --text-secondary: var(--gray-500);
+  --border: var(--gray-200);
+  --link: var(--mid-blue);
+  --link-hover: var(--accent);
+
+  /* Layout */
+  --max-width: 720px;
+  --max-width-wide: 1080px;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] {
+  --bg: #020610;
+  --bg-secondary: #0a1020;
+  --text: #e8efff;
+  --text-secondary: #8b949e;
+  --border: #1a2538;
+  --link: #87CEEB;
+  --link-hover: var(--accent);
+}
+
+/* ── Light mode overrides ── */
+[data-theme="light"] {
+  --bg: #f7eedc;
+  --bg-secondary: #efe3ce;
+  --text: #23150f;
+  --text-secondary: #433729;
+  --border: #d8c7b1;
+  --link: #B85450;
+  --link-hover: #e63b2e;
+  --accent: #e63b2e;
+}
+
+/* ── Base styles ── */
+html {
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 1.75rem; margin-top: 2rem; }
+h3 { font-size: 1.35rem; margin-top: 1.5rem; }
+
+p { margin-top: 0.8em; }
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover { color: var(--link-hover); }
+
+img { max-width: 100%; display: block; }
+
+/* ── Utility ── */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.container-wide {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 3rem 0;
+}
+
+/* ── Prose (for blog/long-form) ── */
+.prose h2 { margin-top: 2.5rem; }
+.prose h3 { margin-top: 2rem; }
+.prose p + p { margin-top: 1.2em; }
+.prose ul, .prose ol {
+  margin-top: 0.8em;
+  padding-left: 1.5em;
+}
+.prose li { margin-top: 0.3em; }
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin: 1.5em 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.prose code {
+  background: var(--bg-secondary);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.prose pre {
+  background: var(--bg-secondary);
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+.prose pre code {
+  background: none;
+  padding: 0;
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+/* ── Canvas texture overlay (subtle linen/paper feel) ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image:
+    /* Crosshatch linen texture */
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.06),
+      rgba(255,255,255,0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.04) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+[data-theme="light"] body::before {
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(140,110,70,0.06),
+      rgba(140,110,70,0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(140,110,70,0.04),
+      rgba(140,110,70,0.04) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--accent);
+  color: var(--deep-blue);
+}
+[data-theme="light"] ::selection {
+  background: #f7e6a3;
+  color: var(--text);
+}

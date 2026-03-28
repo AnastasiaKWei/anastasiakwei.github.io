@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('writing'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<BaseLayout title="Writing">
+  <div class="section">
+    <div class="container">
+      <h1>Writing</h1>
+      <p class="subtitle">Blog posts, essays, and longer thoughts.</p>
+
+      <div class="post-list">
+        {posts.map((post) => (
+          <a href={`/writing/${post.id}`} class="post-item">
+            <time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+            <div>
+              <h3 class="post-title">{post.data.title}</h3>
+              {post.data.description && <p class="post-desc">{post.data.description}</p>}
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {posts.length === 0 && (
+        <p class="empty">No posts yet. Check back soon.</p>
+      )}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    align-items: baseline;
+  }
+  .post-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .post-item:hover .post-title {
+    color: var(--accent);
+  }
+
+  .post-date {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .post-title {
+    font-size: 1.1rem;
+    margin: 0;
+    transition: color 0.2s;
+  }
+
+  .post-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+  }
+
+  .empty {
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  @media (max-width: 500px) {
+    .post-item {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

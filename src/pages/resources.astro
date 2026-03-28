@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sections = [
+  {
+    title: 'Productivity',
+    items: [
+      { name: 'Tool Name', desc: 'What it does and why I like it', link: '#' },
+      { name: 'Another Tool', desc: 'Brief description of its value', link: '#' },
+    ],
+  },
+  {
+    title: 'Learning',
+    items: [
+      { name: 'Resource Name', desc: 'What it covers', link: '#' },
+      { name: 'Course or Book', desc: 'Why it\'s worth your time', link: '#' },
+    ],
+  },
+  {
+    title: 'Utilities',
+    items: [
+      { name: 'Utility Name', desc: 'What problem it solves', link: '#' },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Resources & Utils">
+  <div class="section">
+    <div class="container">
+      <h1>Resources & Utils</h1>
+      <p class="subtitle">Tools, resources, and things I find useful for getting things done.</p>
+
+      {sections.map((section) => (
+        <div class="resource-section">
+          <h2>{section.title}</h2>
+          <div class="resource-list">
+            {section.items.map((item) => (
+              <a href={item.link} class="resource-item" target="_blank" rel="noopener">
+                <strong>{item.name}</strong>
+                <span class="resource-desc">{item.desc}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .resource-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .resource-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .resource-item:hover {
+    border-color: var(--accent);
+    background: var(--bg-secondary);
+  }
+
+  .resource-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+</style>

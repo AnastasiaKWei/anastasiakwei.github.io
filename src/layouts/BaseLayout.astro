@@ -1,0 +1,140 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  isHome?: boolean;
+}
+
+const { title, description = 'Personal website', isHome = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <ClientRouter />
+
+    <!-- Prevent flash of wrong theme -->
+    <script is:inline>
+      (function() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      })();
+    </script>
+  </head>
+  <body>
+    <Nav />
+
+    <!-- Circle canvas (site-wide ambient element) -->
+    <div id="circle-canvas" data-home={isHome ? 'true' : 'false'}></div>
+
+    <!-- Frosted overlay dims circles on text pages for readability -->
+    {!isHome && <div class="page-overlay"></div>}
+
+    <main class:list={[{ 'main-page': !isHome, 'main-home': isHome }]}>
+      <slot />
+    </main>
+
+    {!isHome && <Footer />}
+
+    <script>
+      import { initCircles } from '../scripts/circles';
+
+      function boot() {
+        const canvas = document.getElementById('circle-canvas');
+        if (canvas) {
+          const isHome = canvas.dataset.home === 'true';
+          initCircles(canvas, isHome);
+        }
+      }
+
+      // Works both with and without View Transitions
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+      document.addEventListener('astro:after-swap', boot);
+    </script>
+  </body>
+</html>
+
+<style>
+  #circle-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    /* Dark mode: deep oil-painting blues with texture */
+    background:
+      /* Subtle warm glow patches for depth */
+      radial-gradient(700px 500px at 12% 18%, rgba(20,50,120,0.35), transparent 55%),
+      radial-gradient(600px 500px at 78% 8%, rgba(15,40,100,0.30), transparent 50%),
+      radial-gradient(800px 600px at 55% 80%, rgba(10,30,80,0.20), transparent 55%),
+      /* Faint warm accent wash */
+      radial-gradient(400px 400px at 30% 65%, rgba(80,40,20,0.08), transparent 60%),
+      /* Deep base */
+      linear-gradient(175deg, #020610, #041028 25%, #06183a 50%, #041028 75%, #020610);
+  }
+
+  :global([data-theme="light"]) #circle-canvas {
+    /* Light mode: warm parchment paper with watercolour washes */
+    background:
+      /* Warm golden washes */
+      radial-gradient(900px 700px at 15% 15%, rgba(210,175,100,0.18), transparent 55%),
+      radial-gradient(700px 500px at 80% 5%, rgba(200,160,90,0.14), transparent 50%),
+      radial-gradient(600px 500px at 60% 85%, rgba(180,140,70,0.10), transparent 55%),
+      /* Faint blush accent */
+      radial-gradient(500px 400px at 40% 50%, rgba(220,140,100,0.06), transparent 55%),
+      /* Warm off-white base */
+      linear-gradient(178deg, #f7eedc, #f0e4ce 30%, #e8d9c0 60%, #f0e4ce 85%, #f7eedc);
+  }
+
+  #circle-canvas[data-home="true"] {
+    pointer-events: auto;
+  }
+
+  .main-home {
+    /* No padding — text overlays the full canvas */
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .page-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background: rgba(2, 6, 16, 0.55);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  :global([data-theme="light"]) .page-overlay {
+    background: rgba(247, 238, 220, 0.6);
+  }
+
+  .main-page {
+    padding-top: 2rem;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+  }
+</style>

@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Define albums — replace with your actual photos
+const albums = [
+  {
+    name: 'Travel',
+    slug: 'travel',
+    cover: '/images/album/placeholder.jpg',
+    photos: [
+      { src: '/images/album/placeholder.jpg', caption: 'Description of this photo' },
+      { src: '/images/album/placeholder.jpg', caption: 'Another memorable moment' },
+    ],
+  },
+  {
+    name: 'Life',
+    slug: 'life',
+    cover: '/images/album/placeholder.jpg',
+    photos: [
+      { src: '/images/album/placeholder.jpg', caption: 'A snapshot of everyday life' },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Album">
+  <div class="section">
+    <div class="container-wide">
+      <h1>Album</h1>
+      <p class="subtitle">Moments captured.</p>
+
+      <!-- Album grid view -->
+      <div class="album-grid" id="album-grid">
+        {albums.map((album) => (
+          <button class="album-card" data-album={album.slug}>
+            <div class="album-cover">
+              <div class="album-cover-placeholder"></div>
+            </div>
+            <h3 class="album-name">{album.name}</h3>
+            <p class="album-count">{album.photos.length} photos</p>
+          </button>
+        ))}
+      </div>
+
+      <!-- Expanded album view -->
+      <div class="album-expanded" id="album-expanded" style="display: none;">
+        <button class="back-btn" id="album-back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to albums
+        </button>
+        <h2 id="album-title"></h2>
+        <div class="photo-grid" id="photo-grid"></div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script define:vars={{ albums }}>
+  document.addEventListener('astro:page-load', () => {
+    const grid = document.getElementById('album-grid');
+    const expanded = document.getElementById('album-expanded');
+    const backBtn = document.getElementById('album-back');
+    const titleEl = document.getElementById('album-title');
+    const photoGrid = document.getElementById('photo-grid');
+
+    if (!grid || !expanded || !backBtn || !titleEl || !photoGrid) return;
+
+    // Click album card to expand
+    grid.querySelectorAll('.album-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const slug = card.getAttribute('data-album');
+        const album = albums.find((a) => a.slug === slug);
+        if (!album) return;
+
+        titleEl.textContent = album.name;
+        photoGrid.innerHTML = album.photos
+          .map(
+            (p) => `
+          <div class="photo-item">
+            <div class="photo-placeholder"></div>
+            <p class="photo-caption">${p.caption}</p>
+          </div>
+        `
+          )
+          .join('');
+
+        grid.style.display = 'none';
+        expanded.style.display = 'block';
+      });
+    });
+
+    // Back button
+    backBtn.addEventListener('click', () => {
+      expanded.style.display = 'none';
+      grid.style.display = 'grid';
+    });
+  });
+</script>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .album-card {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.2s, transform 0.2s;
+    color: var(--text);
+    font-family: inherit;
+  }
+  .album-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .album-cover-placeholder,
+  .photo-placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .album-cover-placeholder::after,
+  .photo-placeholder::after {
+    content: 'Add photo';
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .album-name {
+    padding: 0.75rem 1rem 0;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  .album-count {
+    padding: 0.25rem 1rem 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--text); }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  :global(.photo-item) {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  :global(.photo-caption) {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+</style>

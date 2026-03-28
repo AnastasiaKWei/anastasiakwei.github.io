@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Now">
+  <div class="section">
+    <div class="container">
+      <h1>Now</h1>
+      <p class="updated">Last updated: February 2026</p>
+
+      <div class="prose">
+        <p>
+          This is a <a href="https://nownownow.com/about" target="_blank" rel="noopener">now page</a>.
+          It tells you what I'm focused on at this point in my life.
+        </p>
+
+        <h2>Currently</h2>
+        <ul>
+          <li>Building this website</li>
+          <li>Reading — add your current book here</li>
+          <li>Working on — describe your current focus</li>
+        </ul>
+
+        <h2>Thinking About</h2>
+        <ul>
+          <li>Add topics you're mulling over</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .updated {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+</style>

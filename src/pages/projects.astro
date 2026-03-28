@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    title: 'Project One',
+    description: 'A brief description of what this project does and why it matters.',
+    link: '#',
+  },
+  {
+    title: 'Project Two',
+    description: 'Another project with a clear purpose and meaningful impact.',
+    link: '#',
+  },
+  {
+    title: 'Project Three',
+    description: 'Something interesting you built — tools, apps, experiments.',
+    link: '#',
+  },
+];
+---
+
+<BaseLayout title="Projects">
+  <div class="section">
+    <div class="container-wide">
+      <h1>Projects</h1>
+      <p class="subtitle">Things I've built and worked on.</p>
+
+      <div class="project-list">
+        {projects.map((p) => (
+          <a href={p.link} class="project-item">
+            <h3 class="project-title">{p.title}</h3>
+            <p class="project-desc">{p.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+  }
+
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 1rem;
+  }
+
+  .project-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    transition: background 0.2s;
+  }
+  .project-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+  .project-item:hover {
+    background: var(--bg-secondary);
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .project-desc {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 600px) {
+    .project-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

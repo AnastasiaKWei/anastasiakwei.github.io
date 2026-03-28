@@ -1,0 +1,389 @@
+---
+const currentPath = Astro.url.pathname;
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/writing', label: 'Writing' },
+  { href: '/now', label: 'Now' },
+  { href: '/favorites', label: 'Favorites' },
+  { href: '/doing-good', label: 'Doing Good' },
+  { href: '/resources', label: 'Resources' },
+  { href: '/album', label: 'Album' },
+];
+
+function isActive(href: string) {
+  if (href === '/') return currentPath === '/' || currentPath === '';
+  return currentPath.startsWith(href);
+}
+---
+
+<!-- Top-left control bar -->
+<div class="top-controls">
+  <button class="ctrl-btn sidebar-trigger" aria-label="Open menu" aria-expanded="false">
+    <span class="hamburger"></span>
+    <span class="ctrl-label">Directory</span>
+  </button>
+
+  <button class="ctrl-btn motion-toggle" aria-label="Toggle motion">
+    <svg class="icon-pause" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+    </svg>
+    <svg class="icon-play" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polygon points="5 3 19 12 5 21 5 3"/>
+    </svg>
+    <span class="ctrl-label">Pause Motion</span>
+  </button>
+
+  <button class="ctrl-btn circles-toggle" aria-label="Toggle circles">
+    <svg class="icon-circles-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/>
+    </svg>
+    <svg class="icon-circles-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/><line x1="4" y1="4" x2="20" y2="20"/>
+    </svg>
+    <span class="ctrl-label">Hide Circles</span>
+  </button>
+</div>
+
+<!-- Top-right theme toggle -->
+<button class="theme-toggle" aria-label="Toggle dark mode">
+  <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <circle cx="12" cy="12" r="5"/>
+    <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+    <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+  </svg>
+  <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
+
+<!-- Overlay backdrop -->
+<div class="sidebar-overlay"></div>
+
+<!-- Sidebar panel -->
+<aside class="sidebar" aria-hidden="true">
+  <nav>
+    <ul class="sidebar-links">
+      {links.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['sidebar-link', { active: isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</aside>
+
+<style>
+  /* ── Top control bar ── */
+  .top-controls {
+    position: fixed;
+    top: 1rem;
+    left: 1.2rem;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .ctrl-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0;
+    transition: opacity 0.2s;
+    font-weight: 500;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  :global([data-theme="light"]) .ctrl-btn {
+    color: #2a2018;
+  }
+  .ctrl-btn:hover {
+    opacity: 0.7;
+  }
+
+  .ctrl-label {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Theme toggle (upper right) ── */
+  .theme-toggle {
+    position: fixed;
+    top: 1.1rem;
+    right: 1.4rem;
+    z-index: 200;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 0;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+  }
+  :global([data-theme="light"]) .theme-toggle {
+    color: #2a2018;
+  }
+  .theme-toggle:hover {
+    opacity: 0.7;
+  }
+
+  /* ── Hamburger icon ── */
+  .hamburger,
+  .hamburger::before,
+  .hamburger::after {
+    display: block;
+    width: 16px;
+    height: 1.8px;
+    background: currentColor;
+    border-radius: 1px;
+    transition: transform 0.3s, opacity 0.3s;
+    position: relative;
+  }
+  .hamburger::before,
+  .hamburger::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+  .hamburger::before { top: -5px; }
+  .hamburger::after { top: 5px; }
+
+  .sidebar-trigger[aria-expanded="true"] .hamburger {
+    background: transparent;
+  }
+  .sidebar-trigger[aria-expanded="true"] .hamburger::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+  .sidebar-trigger[aria-expanded="true"] .hamburger::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  /* ── Motion toggle icons ── */
+  .motion-toggle .icon-play { display: none; }
+  .motion-toggle .icon-pause { display: block; }
+  .motion-toggle.paused .icon-play { display: block; }
+  .motion-toggle.paused .icon-pause { display: none; }
+
+  /* ── Circles toggle icons ── */
+  .circles-toggle .icon-circles-off { display: none; }
+  .circles-toggle .icon-circles-on { display: block; }
+  .circles-toggle.hidden .icon-circles-off { display: block; }
+  .circles-toggle.hidden .icon-circles-on { display: none; }
+
+  /* ── Overlay ── */
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── Sidebar panel ── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 100vh;
+    z-index: 150;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    background: rgba(13, 17, 23, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    flex-direction: column;
+    padding: 4.5rem 0 2rem;
+  }
+  :global([data-theme="light"]) .sidebar {
+    background: rgba(247, 238, 220, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-right: 1px solid rgba(42, 32, 24, 0.08);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* ── Links ── */
+  .sidebar-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .sidebar-link {
+    display: block;
+    padding: 0.6rem 1.8rem;
+    font-size: 1.15rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    transition: color 0.2s, background 0.2s;
+    text-decoration: none;
+  }
+  .sidebar-link:hover {
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .sidebar-link.active {
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  :global([data-theme="light"]) .sidebar-link {
+    color: rgba(42, 32, 24, 0.5);
+  }
+  :global([data-theme="light"]) .sidebar-link:hover {
+    color: rgba(42, 32, 24, 0.85);
+    background: rgba(42, 32, 24, 0.04);
+  }
+  :global([data-theme="light"]) .sidebar-link.active {
+    color: rgba(42, 32, 24, 0.85);
+    background: rgba(42, 32, 24, 0.06);
+  }
+
+  /* Sun/moon: hidden by default, toggled via JS */
+  .theme-toggle .icon-sun,
+  .theme-toggle .icon-moon {
+    display: none;
+  }
+</style>
+
+<script>
+  // Theme toggle
+  function initTheme() {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  initTheme();
+  document.addEventListener('astro:after-swap', initTheme);
+
+  function initControls() {
+    const trigger = document.querySelector('.sidebar-trigger');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.sidebar-overlay');
+
+    function openSidebar() {
+      sidebar?.classList.add('open');
+      overlay?.classList.add('open');
+      trigger?.setAttribute('aria-expanded', 'true');
+      sidebar?.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSidebar() {
+      sidebar?.classList.remove('open');
+      overlay?.classList.remove('open');
+      trigger?.setAttribute('aria-expanded', 'false');
+      sidebar?.setAttribute('aria-hidden', 'true');
+    }
+
+    trigger?.addEventListener('click', () => {
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeSidebar() : openSidebar();
+    });
+
+    overlay?.addEventListener('click', closeSidebar);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSidebar();
+    });
+
+    // Motion toggle — dispatches custom event for circles.ts to listen to
+    const motionBtn = document.querySelector('.motion-toggle');
+    const motionLabel = motionBtn?.querySelector('.ctrl-label');
+    motionBtn?.addEventListener('click', () => {
+      const isPaused = motionBtn.classList.toggle('paused');
+      if (motionLabel) {
+        motionLabel.textContent = isPaused ? 'Play Motion' : 'Pause Motion';
+        motionLabel.style.display = '';
+      }
+      window.dispatchEvent(new CustomEvent('toggle-motion', { detail: { paused: isPaused } }));
+    });
+
+    // Theme toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    const sunIcon = themeToggle?.querySelector('.icon-sun') as HTMLElement | null;
+    const moonIcon = themeToggle?.querySelector('.icon-moon') as HTMLElement | null;
+
+    function updateThemeIcon() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (sunIcon) sunIcon.style.display = isDark ? 'none' : 'block';
+      if (moonIcon) moonIcon.style.display = isDark ? 'block' : 'none';
+    }
+    updateThemeIcon();
+
+    themeToggle?.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeIcon();
+      // Re-render circles with new color palette
+      window.dispatchEvent(new CustomEvent('theme-changed'));
+    });
+
+    // Circles visibility toggle
+    const circlesBtn = document.querySelector('.circles-toggle');
+    const circlesLabel = circlesBtn?.querySelector('.ctrl-label');
+    const canvas = document.getElementById('circle-canvas');
+    const pageOverlay = document.querySelector('.page-overlay') as HTMLElement | null;
+
+    function setCirclesVisible(visible: boolean) {
+      // Hide the SVG and texture overlay inside the canvas, but keep the background
+      if (canvas) {
+        const svg = canvas.querySelector('svg');
+        const texOverlay = canvas.querySelector('.canvas-texture-overlay');
+        if (svg) (svg as HTMLElement).style.display = visible ? '' : 'none';
+        if (texOverlay) (texOverlay as HTMLElement).style.display = visible ? '' : 'none';
+      }
+      if (pageOverlay) pageOverlay.style.display = visible ? '' : 'none';
+      if (circlesLabel) circlesLabel.textContent = visible ? 'Hide Circles' : 'Show Circles';
+      if (visible) circlesBtn?.classList.remove('hidden');
+      else circlesBtn?.classList.add('hidden');
+      sessionStorage.setItem('circles-hidden', String(!visible));
+    }
+
+    // Restore saved preference
+    if (sessionStorage.getItem('circles-hidden') === 'true') {
+      setCirclesVisible(false);
+    }
+    circlesBtn?.addEventListener('click', () => {
+      const isCurrentlyHidden = circlesBtn?.classList.contains('hidden');
+      setCirclesVisible(!!isCurrentlyHidden);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initControls);
+  } else {
+    initControls();
+  }
+  document.addEventListener('astro:after-swap', initControls);
+</script>

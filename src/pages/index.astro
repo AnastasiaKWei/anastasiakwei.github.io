@@ -1,0 +1,222 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Home" isHome={true}>
+  <div class="home-overlay">
+    <div class="home-content">
+      <h1 class="hero-title">Anastasia Wei</h1>
+
+      <div class="quick-links">
+        <a href="/now" class="home-link">Now</a>
+        <span class="link-sep">/</span>
+        <a href="/projects" class="home-link">Projects</a>
+        <span class="link-sep">/</span>
+        <a href="/writing" class="home-link">Writing</a>
+      </div>
+
+      <p class="hero-subtitle">
+        Builder, thinker, optimist.<br/>
+        I care about making things that matter.
+      </p>
+
+      <div class="more-sections">
+        <details class="more-section">
+          <summary>Contact</summary>
+          <div class="section-body">
+            <a href="mailto:hello@example.com" class="more-link">Email</a>
+          </div>
+        </details>
+
+        <details class="more-section">
+          <summary>Feedback</summary>
+          <div class="section-body">
+            I'm always looking to improve. If you have thoughts or suggestions,
+            I'd love to hear from you.
+          </div>
+        </details>
+
+        <details class="more-section">
+          <summary>More</summary>
+          <div class="section-body">
+            Welcome to my corner of the internet. I'm interested in technology,
+            ideas that improve the world, and building things that are useful and beautiful.
+          </div>
+          <details class="more-section">
+            <summary>More</summary>
+            <div class="section-body">Placeholder — describe current projects and focus areas.</div>
+            <details class="more-section">
+              <summary>More</summary>
+              <div class="section-body">Placeholder — describe values, worldview, and what drives you.</div>
+              <details class="more-section">
+                <summary>More</summary>
+                <div class="section-body">Placeholder — describe your background and journey.</div>
+              </details>
+            </details>
+          </details>
+        </details>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .home-overlay {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 3rem;
+    padding-left: max(3rem, 8vw);
+    pointer-events: none;
+  }
+
+  .home-overlay * {
+    pointer-events: auto;
+  }
+
+  .home-content {
+    max-width: 520px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    text-shadow: 0 2px 40px rgba(0, 0, 0, 0.5);
+    line-height: 1.05;
+  }
+
+  .quick-links {
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-link {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+  .home-link:hover {
+    color: var(--accent);
+  }
+
+  .link-sep {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.1rem;
+  }
+
+  .hero-subtitle {
+    margin-top: 1.2rem;
+    font-size: 1.1rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    color: #ffffff;
+    line-height: 1.7;
+    max-width: 440px;
+  }
+
+  .more-sections {
+    margin-top: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .more-section {
+    border: none;
+  }
+
+  .more-section summary {
+    cursor: pointer;
+    font-size: 1.15rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 0.3rem 0;
+    list-style: none;
+    transition: color 0.2s;
+    user-select: none;
+  }
+
+  .more-section summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .more-section summary::before {
+    content: '+ ';
+    font-family: monospace;
+    font-size: 0.95rem;
+  }
+
+  .more-section[open] > summary::before {
+    content: '- ';
+  }
+
+  .more-section summary:hover {
+    color: var(--accent);
+  }
+
+  .section-body {
+    font-size: 1.00rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    color: #ffffff;
+    line-height: 1.6;
+    padding: 0.3rem 0 0.6rem 1.2rem;
+    max-width: 440px;
+  }
+
+  .more-link {
+    color: #ffffff;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    transition: color 0.2s;
+  }
+  .more-link:hover {
+    color: var(--accent);
+  }
+
+  /* ── Light mode text overrides ── */
+  :global([data-theme="light"]) .hero-title {
+    color: #2a1a10;
+    text-shadow: 0 2px 40px rgba(180, 140, 80, 0.3);
+  }
+  :global([data-theme="light"]) .home-link {
+    color: #2a1a10;
+  }
+  :global([data-theme="light"]) .home-link:hover {
+    color: var(--accent);
+  }
+  :global([data-theme="light"]) .link-sep {
+    color: rgba(42, 26, 16, 0.35);
+  }
+  :global([data-theme="light"]) .hero-subtitle {
+    color: #3a2a18;
+  }
+  :global([data-theme="light"]) .more-section summary {
+    color: #2a1a10;
+  }
+  :global([data-theme="light"]) .more-section summary:hover {
+    color: var(--accent);
+  }
+  :global([data-theme="light"]) .section-body {
+    color: #3a2a18;
+  }
+  :global([data-theme="light"]) .more-link {
+    color: #5a4020;
+  }
+  :global([data-theme="light"]) .more-link:hover {
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    .home-overlay {
+      padding: 0 1.5rem;
+    }
+  }
+</style>

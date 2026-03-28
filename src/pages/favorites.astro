@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const categories = [
+  {
+    name: 'Books',
+    items: ['Tim Urban - <a href="https://www.goodreads.com/book/show/102146148-what-s-our-problem">What\'s Our Problem?</a>',
+            'Yuval Noah Harari - <a href="https://www.goodreads.com/series/432659-homo">Sapiens and Homo Deus</a>',
+            `John Green - <a href="https://www.goodreads.com/book/show/55145261-the-anthropocene-reviewed">The Anthropocene Reviewed</a>, 
+             also checkout the <a href="https://open.spotify.com/show/3scirzcuaGm02MQ4FUZydq">podcast</a>`,
+            'Allie Brosh - <a href="https://hyperboleandahalf.blogspot.com/">Hyperbole and a Half</a>',
+            'Randall Munroe - <a href="https://www.goodreads.com/series/336143-what-if">What if?</a>',
+            `林清玄 - 迷路的云`,
+            'Matt Parker - <a href="https://makeanddo4d.com/">Things to Make and Do in the Fourth Dimension</a>'
+    ],
+  },
+  {
+    name: 'Movies',
+    items: ['Gattaca (1997)', 
+            'Eternal Sunshine of the Spotless Mind (2004)', 
+            'The God Father (1972)'],
+  },
+  {
+    name: 'Music',
+    items: ['<a href="https://www.youtube.com/channel/UC3Wj9aO8VS5ZuXrtWfJf81w">Joshua Lee Turner</a> - one of my favorite guitarists/multi-instrumentalists',
+            'Belle and Sebastian',
+            'Pomplamoose',
+            'Toledo',
+            'Flyte',
+            'GingerRoot',
+            'The Hail',
+            'The Technicolors',
+            'dodie',
+            'Fiest',
+            'Vulfpeck, Vulmon, Theo Katzman',
+            ],
+  },
+  {
+    name: 'Tools & Software',
+    items: ['Tool One — brief note', 'Tool Two — brief note'],
+  },
+  {
+    name: 'People on the Internet',
+    items: ['John & Hank Green - check out the <a href="https://good.store/pages/our-founders-hank-john-green">Good Store</a> (all profits go to charity) and <a href="https://open.spotify.com/show/6e4HNBdPvjDOHKVf82oMEk">Dear Hank & John</a>',
+            'Grant Sanderson — creator of <a href="https://www.3blue1brown.com/about">3B1B</a>',
+            'Tim Urban — writer of <a href="https://waitbutwhy.com/">WaitBuyWhy</a>',
+            '<a href="https://www.youtube.com/\@jameshoffmann">James Hoffmann</a> - weird coffee person'],
+  }
+];
+---
+
+<BaseLayout title="Favorites">
+  <div class="section">
+    <div class="container">
+      <h1>Favorites</h1>
+      <p class="subtitle">An in complete collection of things I enjoy, in no particular order.</p>
+
+      <div class="categories">
+        {categories.map((cat) => (
+          <details class="category">
+            <summary class="category-name">{cat.name}</summary>
+            <ul class="category-items">
+              {cat.items.map((item) => (
+                <li set:html={item}></li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text);
+    margin-bottom: 2rem;
+  }
+
+  .categories {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .category {
+    border: none;
+  }
+
+  .category-name {
+    font-weight: 700;
+    font-size: 1.65rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    padding: 0.35rem 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .category-name:hover {
+    color: var(--accent);
+  }
+
+  .category-name::before {
+    content: '+ ';
+    font-family: monospace;
+    font-size: 0.95rem;
+  }
+  details[open] > .category-name::before {
+    content: '- ';
+  }
+
+  /* Hide default marker */
+  .category-name::-webkit-details-marker { display: none; }
+
+  .category-items {
+    padding: 0.2rem 0 0.65rem 1.25rem;
+    list-style: disc;
+    font-size: 1.02rem;
+  }
+  .category-items li {
+    padding: 0.25rem 0;
+    color: var(--text);
+  }
+
+  /* Ensure links inherit global link colors */
+  .category-items a {
+    color: inherit;
+  }
+</style>
