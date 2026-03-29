@@ -12,6 +12,9 @@
     "@fontsource/atkinson-hyperlegible": "^5.2.8",
     "@fontsource/cormorant-garamond": "^5.2.11",
     "@fontsource/playfair-display": "^5.2.8",
-    "astro": "^5.17.1"
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.75",
+    "astro": "^5.17.1",
+    "astro-icon": "^1.1.5"
   }
 }

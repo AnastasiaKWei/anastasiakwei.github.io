@@ -33,6 +33,7 @@ const { title, description = 'Personal website', isHome = false } = Astro.props;
     </script>
   </head>
   <body>
+    <div class="under-construction">🚧 This site is under construction</div>
     <Nav />
 
     <!-- Circle canvas (site-wide ambient element) -->
@@ -70,6 +71,23 @@ const { title, description = 'Personal website', isHome = false } = Astro.props;
 </html>
 
 <style>
+  .under-construction {
+    position: relative;
+    z-index: 100;
+    text-align: center;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    background: rgba(255, 200, 0, 0.12);
+    color: #f0c040;
+    letter-spacing: 0.03em;
+  }
+
+  :global([data-theme="light"]) .under-construction {
+    background: rgba(180, 120, 0, 0.12);
+    color: #8a6000;
+  }
+
   #circle-canvas {
     position: fixed;
     top: 0;

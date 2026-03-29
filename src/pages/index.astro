@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <BaseLayout title="Home" isHome={true}>
@@ -16,25 +17,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <p class="hero-subtitle">
-        Builder, thinker, optimist.<br/>
-        I care about making things that matter.
+        Tread lightly, but make a difference.<br/>
+        <span class="quote-author">— Seth Godin</span>
       </p>
+
+      <div class="hero-bio">
+        <p>Hi, I'm Anastasia Wei. I'm an Astrophysics PhD student at UC Berkeley, where I build AI agents for automating science research workflows and discovering interesting targets in modern astronomical surveys.</p>
+        <p>I care deeply about the future of humanity as we enter the age of transformative AI, and think carefully about the catastrophic and existential risks it could bring. Right now the window to get our decisions right feels rather narrow.</p>
+        <p>I like meeting new people. If you happen to find yourself in Berkeley, feel free to reach out and we can go grab coffee. </p>
+        <p class="bio-links">
+          <a href="#" class="more-link">Help me be a better person <span class="link-tag">[↗]</span></a>
+          <span class="link-sep">/</span>
+          <a href="#" class="more-link">Submit a hot take <span class="link-tag">[↗]</span></a>
+        </p>
+      </div>
 
       <div class="more-sections">
         <details class="more-section">
           <summary>Contact</summary>
           <div class="section-body">
-            <a href="mailto:hello@example.com" class="more-link">Email</a>
+            <a href="mailto:astkwei@gmail.com" class="more-link contact-item"><Icon name="mdi:email-outline" class="contact-icon" /> astkwei@gmail.com</a><br/>
+            <span class="contact-item"><Icon name="simple-icons:signal" class="contact-icon" /> astwei.11</span>
           </div>
         </details>
 
-        <details class="more-section">
-          <summary>Feedback</summary>
-          <div class="section-body">
-            I'm always looking to improve. If you have thoughts or suggestions,
-            I'd love to hear from you.
-          </div>
-        </details>
 
         <details class="more-section">
           <summary>More</summary>
@@ -115,11 +121,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .hero-subtitle {
     margin-top: 1.2rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     color: #ffffff;
     line-height: 1.7;
     max-width: 440px;
+  }
+
+  .hero-bio {
+    margin-top: 1.4rem;
+    font-size: 1rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    color: #ffffff;
+    line-height: 1.7;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  :global([data-theme="light"]) .hero-bio {
+    color: #3a2a18;
+  }
+
+  .quote-author {
+    display: block;
+    text-align: right;
+    font-style: italic;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    opacity: 0.75;
   }
 
   .more-sections {
@@ -170,6 +200,30 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.6;
     padding: 0.3rem 0 0.6rem 1.2rem;
     max-width: 440px;
+  }
+
+  .bio-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .link-tag {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    font-family: monospace;
+  }
+
+  .contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .contact-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
   }
 
   .more-link {

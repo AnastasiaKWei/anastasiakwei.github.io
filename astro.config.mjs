@@ -1,10 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://anastasiakwei.github.io',
-  // If deploying to a subpath like https://astwei.github.io/website/
-  // uncomment the next line:
-  // base: '/website',
+  integrations: [icon()],
 });
