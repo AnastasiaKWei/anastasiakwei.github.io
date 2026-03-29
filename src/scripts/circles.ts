@@ -692,6 +692,13 @@ export function initCircles(container: HTMLElement, isHome: boolean) {
   // Add canvas grain texture overlay (option 4: randomized, not uniform)
   addTextureOverlay(container);
 
+  // Respect circles-hidden preference from sessionStorage
+  if (sessionStorage.getItem('circles-hidden') === 'true') {
+    svg.style.display = 'none';
+    const texOverlay = container.querySelector('.canvas-texture-overlay');
+    if (texOverlay) (texOverlay as HTMLElement).style.display = 'none';
+  }
+
   const running = { value: true };
   animateCircles(circles, w, h, running);
 
