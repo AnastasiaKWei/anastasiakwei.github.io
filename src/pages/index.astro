@@ -22,11 +22,32 @@ import { Icon } from 'astro-icon/components';
       </p>
 
       <div class="hero-bio">
-        <p>Hi, I'm Anastasia Wei. I'm an Astrophysics PhD student at UC Berkeley, where I build AI agents for automating science research workflows and discovering interesting targets in modern astronomical surveys.</p>
+        <p>Hi, I'm Anastasia Wei. I'm an Astrophysics PhD student at UC Berkeley, where I build AI agents for automating science research workflows and discovering
+          <span class="tooltip-wrap">
+            interesting targets
+            <span class="tooltip">
+              Rare astrophysical transients — brief, luminous events that don't fit neatly into known categories. Examples include
+              <a href="https://en.wikipedia.org/wiki/Fast_blue_optical_transient" target="_blank" rel="noopener">fast blue optical transients (FBOTs)</a>,
+              <a href="https://en.wikipedia.org/wiki/Tidal_disruption_event" target="_blank" rel="noopener">tidal disruption events (TDEs)</a>,
+              <a href="https://en.wikipedia.org/wiki/Kilonova" target="_blank" rel="noopener">kilonovae</a>, and
+              <a href="https://en.wikipedia.org/wiki/Supernova#Unusual_supernovae" target="_blank" rel="noopener">peculiar types of supernovae</a>.
+            </span>
+          </span>
+          in
+          <span class="tooltip-wrap">
+            modern astronomical surveys
+            <span class="tooltip">
+              Wide-field sky surveys that image large portions of the sky repeatedly, enabling discovery of transient events. e.g.
+              <a href="https://rubinobservatory.org/" target="_blank" rel="noopener">Rubin Observatory</a>,
+              <a href="https://ls4.org/" target="_blank" rel="noopener">La Silla Schmidt Southern Survey (LS4)</a>, and the
+              <a href="https://www.ztf.caltech.edu/" target="_blank" rel="noopener">Zwicky Transient Facility (ZTF)</a>.
+            </span>
+          </span>.
+        </p>
         <p>I care deeply about the future of humanity as we enter the age of transformative AI, and think carefully about the catastrophic and existential risks it could bring. Right now the window to get our decisions right feels rather narrow.</p>
-        <p>I like meeting new people. If you happen to find yourself in Berkeley, feel free to reach out and we can go grab coffee. </p>
+        <p>I like meeting new people and catching up with friends. If you happen to find yourself in Berkeley, feel free to reach out and we can go grab coffee.</p>
         <p class="bio-links">
-          <a href="https://tally.so/r/VLVevJ" target="_blank" rel="noopener" class="more-link">Help me be a better person <span class="link-tag">[↗]</span></a>
+          <a href="https://tally.so/r/VLVevJ" target="_blank" rel="noopener" class="more-link">Share a realization / insight <span class="link-tag">[↗]</span></a>
           <span class="link-sep">/</span>
           <a href="https://tally.so/r/b5LpKo" target="_blank" rel="noopener" class="more-link">Submit a hot take <span class="link-tag">[↗]</span></a>
         </p>
@@ -41,6 +62,12 @@ import { Icon } from 'astro-icon/components';
           </div>
         </details>
 
+        <details class="more-section">
+          <summary>Feedback</summary>
+          <div class="section-body">
+            I'm always looking to improve. If you have thoughts, corrections, or suggestions about anything on this site, I'd love to hear from you. <a href="https://tally.so/r/VLVevJ" target="_blank" rel="noopener" class="more-link">Share feedback <span class="link-tag">[↗]</span></a>
+          </div>
+        </details>
 
         <details class="more-section">
           <summary>More</summary>
@@ -149,6 +176,59 @@ import { Icon } from 'astro-icon/components';
     font-style: italic;
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     opacity: 0.75;
+  }
+
+  .tooltip-wrap {
+    position: relative;
+    display: inline;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    cursor: default;
+  }
+
+  :global([data-theme="light"]) .tooltip-wrap {
+    border-bottom-color: rgba(42, 26, 16, 0.4);
+    border-bottom-style: solid;
+  }
+
+  .tooltip {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    background: rgba(10, 15, 30, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 0.65rem 0.85rem 0.85rem;
+    font-size: 0.85rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  .tooltip-wrap:hover .tooltip {
+    display: block;
+    pointer-events: auto;
+  }
+
+  .tooltip a {
+    color: #87CEEB;
+    text-decoration: underline;
+  }
+
+  :global([data-theme="light"]) .tooltip {
+    background: rgba(247, 238, 220, 0.96);
+    border-color: rgba(42, 26, 16, 0.12);
+    color: #2a1a10;
+  }
+
+  :global([data-theme="light"]) .tooltip a {
+    color: #B85450;
   }
 
   .more-sections {
