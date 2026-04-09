@@ -1,46 +1,123 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
-const posts = (await getCollection('writing'))
-  .filter((p) => !p.data.draft)
+const all = (await getCollection('writing')).filter((p) => !p.data.draft);
+
+const posts = all
+  .filter((p) => p.data.type !== 'note')
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const notes = all
+  .filter((p) => p.data.type === 'note')
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const renderedNotes = await Promise.all(
+  notes.map(async (note) => ({ note, Content: (await render(note)).Content }))
+);
+
+const quotes = [
+  { text: "Tread lightly, but make a difference.", author: "Seth Godin" },
+  { text: "Life shrinks or expands according to one's courage.", author: "Anaïs Nin" },
+];
 ---
 
 <BaseLayout title="Writing">
   <div class="section">
     <div class="container">
       <h1>Writing</h1>
-      <p class="subtitle">Blog posts, essays, and longer thoughts.</p>
 
-      <div class="post-list">
-        {posts.map((post) => (
-          <a href={`/writing/${post.id}`} class="post-item">
-            <time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+      <details class="writing-section" open>
+        <summary class="section-heading">Essays</summary>
+        <div class="post-list">
+          {posts.map((post) => (
+            <a href={`/writing/${post.id}`} class="post-item">
+              <time class="post-date">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+              <div>
+                <h3 class="post-title">{post.data.title}</h3>
+                {post.data.description && <p class="post-desc">{post.data.description}</p>}
+              </div>
+            </a>
+          ))}
+          <a href="/writing/coming-soon" class="post-item">
+            <time class="post-date">Apr 1, 2026</time>
             <div>
-              <h3 class="post-title">{post.data.title}</h3>
-              {post.data.description && <p class="post-desc">{post.data.description}</p>}
+              <h3 class="post-title">An Essay on Something Interesting</h3>
             </div>
           </a>
-        ))}
-      </div>
+        </div>
+      </details>
 
-      {posts.length === 0 && (
-        <p class="empty">No posts yet. Check back soon.</p>
-      )}
+      <details class="writing-section">
+        <summary class="section-heading">Quotes</summary>
+        <div class="note-list">
+          {quotes.map((q) => (
+            <div class="note-item">
+              <div class="quote-spacer"></div>
+              <div class="note-body">
+                <p class="quote-text">"{q.text}"</p>
+                {q.author && <p class="quote-author">— {q.author}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <details class="writing-section">
+        <summary class="section-heading">Notes</summary>
+        <div class="note-list">
+          {renderedNotes.map(({ note, Content }) => (
+            <div class="note-item">
+              <time class="note-date">{new Date(note.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</time>
+              <div class="note-body prose">
+                <Content />
+              </div>
+            </div>
+          ))}
+          {notes.length === 0 && (
+            <p class="empty">No notes yet.</p>
+          )}
+        </div>
+      </details>
+
     </div>
   </div>
 </BaseLayout>
 
 <style>
-  .subtitle {
-    color: var(--text-secondary);
-    margin-bottom: 2rem;
+  .writing-section {
+    border: none;
+    margin-top: 2.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.75rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+    padding: 0.2rem 0;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .section-heading::-webkit-details-marker { display: none; }
+  .section-heading::before {
+    content: '+ ';
+    font-family: monospace;
+    font-size: 0.9rem;
+  }
+  details[open] > .section-heading::before {
+    content: '- ';
+  }
+  .section-heading:hover {
+    color: var(--accent);
   }
 
   .post-list {
     display: flex;
     flex-direction: column;
+    margin-top: 0.5rem;
   }
 
   .post-item {
@@ -77,13 +154,72 @@ const posts = (await getCollection('writing'))
     margin: 0.25rem 0 0;
   }
 
+  .note-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 0.5rem;
+  }
+
+  .note-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+  .note-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .note-date {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .note-body {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .note-body :global(p) {
+    margin: 0;
+  }
+
+  .note-body :global(a) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .quote-text {
+    font-style: italic;
+    margin: 0 0 0.25rem;
+  }
+
+  .quote-author {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+    text-align: right;
+  }
+
+  .quote-spacer {
+    /* keeps grid alignment consistent with notes */
+  }
+
   .empty {
     color: var(--text-secondary);
     font-style: italic;
+    padding: 1rem 0;
   }
 
   @media (max-width: 500px) {
-    .post-item {
+    .post-item,
+    .note-item {
       grid-template-columns: 1fr;
       gap: 0.25rem;
     }

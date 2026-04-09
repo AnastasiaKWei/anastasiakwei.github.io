@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const quotes = [
+  {
+    text: "Tread lightly, but make a difference.",
+    author: "Seth Godin",
+  },
+  // Add more quotes here
+];
+---
+
+<BaseLayout title="Quotes">
+  <div class="section">
+    <div class="container">
+      <h1>Quotes</h1>
+      <p class="subtitle">Lines I keep coming back to.</p>
+
+      <div class="quote-list">
+        {quotes.map((q) => (
+          <blockquote class="quote-item">
+            <p class="quote-text">{q.text}</p>
+            {q.author && <footer class="quote-author">— {q.author}</footer>}
+          </blockquote>
+        ))}
+      </div>
+
+      <footer class="page-footer">
+        <a href="/writing">&larr; Back to Writing</a>
+      </footer>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+  }
+
+  .quote-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .quote-item {
+    margin: 0;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .quote-item:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  .quote-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin: 0 0 0.5rem;
+    font-style: italic;
+  }
+
+  .quote-author {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  .page-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+</style>
